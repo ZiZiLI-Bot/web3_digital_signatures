@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { FileOutlined, TeamOutlined, UserOutlined } from '@ant-design/icons';
+import { CompressOutlined, SignatureOutlined, FileAddOutlined } from '@ant-design/icons';
 import * as anchor from '@coral-xyz/anchor';
 import { useAnchorWallet, useConnection } from '@solana/wallet-adapter-react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
@@ -8,7 +8,7 @@ import { LAMPORTS_PER_SOL, PublicKey } from '@solana/web3.js';
 import type { MenuProps } from 'antd';
 import { Layout, Menu } from 'antd';
 import React, { useEffect, useState } from 'react';
-import CreateDocs from './Create_doc';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 const { Header, Content, Footer, Sider } = Layout;
 const SOL_ICON = 'https://cryptologos.cc/logos/solana-sol-logo.png';
@@ -25,12 +25,14 @@ function getItem(label: React.ReactNode, key: React.Key, icon?: React.ReactNode,
 }
 
 const items: MenuItem[] = [
-  getItem('Create', 'sub1', <UserOutlined />),
-  getItem('Team', 'sub2', <TeamOutlined />, [getItem('Team 1', '6'), getItem('Team 2', '8')]),
-  getItem('Files', '9', <FileOutlined />),
+  getItem('Create', '/create', <FileAddOutlined />),
+  getItem('Signature', '/signature', <SignatureOutlined />),
+  getItem('Verification', '/verification', <CompressOutlined />),
 ];
 
-export default function App() {
+export default function MainLayout() {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
   const [solBalance, setSolBalance] = useState(0);
   const { connection } = useConnection();
@@ -48,13 +50,17 @@ export default function App() {
     getTransactionAccount();
   }, [wallet]);
 
+  const onClick: MenuProps['onClick'] = (e) => {
+    navigate(e.key.toString());
+  };
+
   return (
     <Layout className='h-[100vh]'>
       <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
         <div className='my-2'>
-          <p className='font-medium text-3xl text-white text-center'>WEB3</p>
+          <p className='font-medium text-3xl text-white text-center'>{collapsed ? 'W3' : 'WEB3'}</p>
         </div>
-        <Menu theme='dark' defaultSelectedKeys={['1']} mode='inline' items={items} />
+        <Menu onClick={onClick} theme='dark' defaultSelectedKeys={[location.pathname]} mode='inline' items={items} />
       </Sider>
       <Layout className='h-full w-full'>
         <Header className='p-0 bg-white'>
@@ -74,12 +80,13 @@ export default function App() {
           </div>
         </Header>
         <Content className='mx-4 mt-2'>
-          <main className='p-6 h-full w-full bg-white rounded-xl'>
-            <CreateDocs />
+          <main className='p-6 h-full w-full bg-white rounded-xl overflow-auto'>
+            {/* <Alert message='This is demo, system run only on devnet' type='error' showIcon /> */}
+            <Outlet />
           </main>
         </Content>
         <Footer style={{ textAlign: 'center' }}>
-          WEB3 - DIGITAL SIGNATURES PROJECT ©{new Date().getFullYear()} Created by DST Team
+          WEB3 - DIGITAL SIGNATURES PROJECT ©{new Date().getFullYear()} Created by LegalChain Team
         </Footer>
       </Layout>
     </Layout>

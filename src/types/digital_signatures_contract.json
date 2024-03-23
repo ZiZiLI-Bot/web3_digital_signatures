@@ -23,7 +23,7 @@
       ],
       "args": [
         {
-          "name": "init",
+          "name": "initData",
           "type": {
             "defined": "Storage"
           }
@@ -76,7 +76,7 @@
       ],
       "args": [
         {
-          "name": "sign",
+          "name": "signData",
           "type": {
             "defined": "Signature"
           }
@@ -140,7 +140,7 @@
           },
           {
             "name": "counter",
-            "type": "u64"
+            "type": "u32"
           },
           {
             "name": "bump",
@@ -167,11 +167,11 @@
             "type": "string"
           },
           {
-            "name": "state",
+            "name": "hashVerified",
             "type": "string"
           },
           {
-            "name": "hashVerified",
+            "name": "state",
             "type": "string"
           },
           {
@@ -191,6 +191,6 @@
     }
   ],
   "metadata": {
-    "address": "EaokY4AMX3ioLUZmbb4fR6oDekK94cApCCdJvPy3cPZ8"
+    "address": "HihBXbXfk1N6gucytEDMcCEVzvs3NgePrgsTRCq7Sdzz"
   }
 }
