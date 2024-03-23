@@ -3,6 +3,8 @@ import { Button } from 'antd';
 import * as anchor from '@coral-xyz/anchor';
 import Blog_IDL from '@/types/blog_test.json';
 import DSC_IDL from '@/types/digital_signatures_contract.json';
+import { PublicKey } from '@solana/web3.js';
+import { getAssociatedTokenAddressSync } from '@solana/spl-token';
 
 export default function CreateDocs() {
   const wallet = useAnchorWallet();
@@ -10,6 +12,8 @@ export default function CreateDocs() {
   const provider = new anchor.AnchorProvider(connection, wallet!, {});
   anchor.setProvider(provider);
   const program = new anchor.Program(DSC_IDL as anchor.Idl, Blog_IDL.metadata.address);
+
+  const token_program_id = new PublicKey('DKc1k886G6ZQgS4zZRZzLhJinQ7C3DBfw9sFcZwzhYXh');
 
   const new_blog = async () => {
     if (!wallet) return;
@@ -38,9 +42,9 @@ export default function CreateDocs() {
     if (!wallet) return;
 
     const data = {
-      title: 'Hello World',
+      title: 'This is new post',
       content: 'This is a test post',
-      slug: 'hello-world',
+      slug: 'new-post',
     };
 
     const [blogPDA, _blogBump] = anchor.web3.PublicKey.findProgramAddressSync(
@@ -49,7 +53,7 @@ export default function CreateDocs() {
     );
 
     const [postPDA, _postBump] = anchor.web3.PublicKey.findProgramAddressSync(
-      [Buffer.from('post'), Buffer.from(data.slug), wallet?.publicKey.toBuffer()],
+      [Buffer.from('post'), blogPDA.toBuffer(), Buffer.from(data.slug)],
       program.programId,
     );
 
@@ -60,7 +64,7 @@ export default function CreateDocs() {
       .accounts({
         authority: wallet.publicKey,
         blog: blogPDA,
-        post: postPDA,
+        postAccount: postPDA,
         systemProgram: anchor.web3.SystemProgram.programId,
       })
       .rpc();
@@ -73,8 +77,25 @@ export default function CreateDocs() {
 
   const get_blog = async () => {
     if (!wallet) return;
-    const data = await connection.getProgramAccounts(program.programId);
-    console.log(data);
+    const [blogPDA, _bump] = anchor.web3.PublicKey.findProgramAddressSync(
+      [Buffer.from('blog'), wallet?.publicKey.toBuffer()],
+      program.programId,
+    );
+
+    console.log('PDA: ', blogPDA.toString());
+
+    const blog = await program.account.blog.fetch(blogPDA);
+    console.log('Blog: ', blog);
+
+    const authority: anchor.web3.PublicKey = blog.authority;
+
+    console.log('Authority: ', authority.toString() === wallet.publicKey.toString());
+  };
+
+  const get_ata = async () => {
+    if (!wallet) return;
+    const ata = getAssociatedTokenAddressSync(token_program_id, wallet.publicKey);
+    console.log('ATA: ', ata.toString());
   };
 
   const init_storage = async () => {
@@ -103,8 +124,10 @@ export default function CreateDocs() {
   return (
     <div className='flex space-x-1'>
       <Button onClick={init_storage}>Create Storage</Button>
-      {/* <Button onClick={create_post}>Create POST</Button>
-      <Button onClick={get_blog}>GET BLOG</Button> */}
+      {/* <Button onClick={new_blog}>Create Blog</Button>
+      <Button onClick={create_post}>Create POST</Button> */}
+      {/* <Button onClick={get_blog}>GET BLOG</Button> */}
+      {/* <Button onClick={get_ata}>GET ATA My Address</Button> */}
     </div>
   );
 }
