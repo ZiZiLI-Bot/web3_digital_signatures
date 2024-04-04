@@ -65,7 +65,7 @@ export default function Verification() {
             {docs.map((doc) => (
               <Card
                 extra={
-                  <Link to={`/verification/${doc.id}`} state={doc}>
+                  <Link to={`/dashboard/verification/${doc.id}`} state={doc}>
                     Verification
                   </Link>
                 }

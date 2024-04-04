@@ -15,10 +15,4 @@ export default defineConfig({
     port: 3721,
     strictPort: true,
   },
-  server: {
-    port: 3721,
-    strictPort: true,
-    host: true,
-    origin: 'http://0.0.0.0:3721',
-  },
 });

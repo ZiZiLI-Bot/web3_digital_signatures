@@ -1,0 +1,50 @@
+.text_title {
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: -0.19125rem;
+  background: linear-gradient(95deg, #fff 1.7%, rgba(255, 255, 255, 0.219) 100.26%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.sanhedrin_1 {
+  animation: bounce-y 4s infinite;
+}
+
+.sanhedrin_2 {
+  animation: bounce-z 4s infinite;
+  animation-delay: 120ms;
+}
+
+@keyframes bounce-y {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(60px);
+  }
+  60% {
+    transform: translateY(30px);
+  }
+}
+
+@keyframes bounce-z {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateX(0) translateY(0);
+  }
+  40% {
+    transform: translateX(60px) translateY(60px);
+  }
+  60% {
+    transform: translateX(-30px);
+  }
+}

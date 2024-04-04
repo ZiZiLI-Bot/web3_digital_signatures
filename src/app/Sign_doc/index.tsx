@@ -68,7 +68,7 @@ export default function SignDoc() {
             {docs.map((doc) => (
               <Card
                 extra={
-                  <Link to={`/signature/${doc.id}`} state={doc}>
+                  <Link to={`/dashboard/signature/${doc.id}`} state={doc}>
                     Detail
                   </Link>
                 }

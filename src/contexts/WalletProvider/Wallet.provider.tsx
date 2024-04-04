@@ -7,6 +7,7 @@ import {
   PhantomWalletAdapter,
   SolflareWalletAdapter,
   TorusWalletAdapter,
+  TrustWalletAdapter,
 } from '@solana/wallet-adapter-wallets';
 import { clusterApiUrl } from '@solana/web3.js';
 import { ReactNode, useMemo } from 'react';
@@ -20,6 +21,7 @@ export default function WalletProviderContext({ children }: { children: ReactNod
       new PhantomWalletAdapter(),
       new SolflareWalletAdapter({ network }),
       new TorusWalletAdapter(),
+      new TrustWalletAdapter({ network }),
     ],
     [network],
   );
